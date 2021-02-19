@@ -10,6 +10,9 @@ package com.hms_networks.americas.sc.retry;
  */
 public abstract class AutomaticRetryCode {
 
+  /** The value for maximum retries used to indicate an unlimited number. */
+  public static final int MAX_RETRIES_UNLIMITED_VALUE = -1;
+
   /** The default value of the {@link #state} variable. */
   private static final AutomaticRetryState STATE_DEFAULT = AutomaticRetryState.PENDING;
 
@@ -39,8 +42,8 @@ public abstract class AutomaticRetryCode {
       if (state == AutomaticRetryState.FINISHED || state == AutomaticRetryState.ERROR_STOP) {
         shouldRun = false;
       } else if (state == AutomaticRetryState.ERROR_RETRY) {
-        // Check if above retry limit, if not, increment retry counter
-        if (retryNumber >= getMaxRetries()) {
+        // Check if above retry limit, if not or unlimited retries enabled, increment retry counter
+        if (retryNumber != MAX_RETRIES_UNLIMITED_VALUE && retryNumber >= getMaxRetries()) {
           // If above retry limit, stop attempting
           shouldRun = false;
         } else {
