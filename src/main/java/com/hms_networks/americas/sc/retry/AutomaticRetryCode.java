@@ -85,6 +85,17 @@ public abstract class AutomaticRetryCode {
   }
 
   /**
+   * Gets the number of the current try of {@link #codeToRetry()}. This is computed by adding 1 to
+   * the retry number.
+   *
+   * @return current try number
+   * @since 1.2
+   */
+  protected int getCurrentTryNumber() {
+    return retryNumber + 1;
+  }
+
+  /**
    * Abstract method which must be implemented to return the maximum number of retries before
    * critically failing.
    *
