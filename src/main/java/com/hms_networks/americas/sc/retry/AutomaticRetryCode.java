@@ -43,7 +43,8 @@ public abstract class AutomaticRetryCode {
         shouldRun = false;
       } else if (state == AutomaticRetryState.ERROR_RETRY) {
         // Check if above retry limit, if not or unlimited retries enabled, increment retry counter
-        if (retryNumber != MAX_RETRIES_UNLIMITED_VALUE && retryNumber >= getMaxRetries()) {
+        final int maxRetries = getMaxRetries();
+        if (maxRetries != MAX_RETRIES_UNLIMITED_VALUE && retryNumber >= maxRetries) {
           // If above retry limit, stop attempting
           shouldRun = false;
         } else {
