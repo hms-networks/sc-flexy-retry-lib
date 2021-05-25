@@ -17,11 +17,20 @@ public abstract class AutomaticRetryCodeLinear extends AutomaticRetryCode {
    * @return number of milliseconds delay before specified retry number
    */
   protected long getDelayMillisBeforeRetry(int retry) {
-    long delayMillisBeforeRetry = retry * getLinearSlopeMillis();
 
-    // Check if above maximum delay, set to maximum if larger
-    if (delayMillisBeforeRetry > getMaxDelayMillisBeforeRetry()) {
-      delayMillisBeforeRetry = getMaxDelayMillisBeforeRetry();
+    long delayMillisBeforeRetry = 0;
+
+    // Check that delayMillisBeforeRetry will not overflow long
+    if ((Long.MAX_VALUE / getLinearSlopeMillis()) > retry) {
+      delayMillisBeforeRetry = retry * getLinearSlopeMillis();
+
+      // Check if above maximum delay, set to maximum if larger
+      if (delayMillisBeforeRetry > getMaxDelayMillisBeforeRetry()) {
+        delayMillisBeforeRetry = getMaxDelayMillisBeforeRetry();
+      }
+    } else {
+      // If retry number is large enough to cause long overflow, set to max long.
+      delayMillisBeforeRetry = Long.MAX_VALUE;
     }
 
     return delayMillisBeforeRetry;
