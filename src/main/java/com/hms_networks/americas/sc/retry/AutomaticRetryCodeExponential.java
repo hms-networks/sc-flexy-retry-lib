@@ -20,6 +20,17 @@ public abstract class AutomaticRetryCodeExponential extends AutomaticRetryCode {
    * @return number of milliseconds delay before specified retry number
    */
   protected long getDelayMillisBeforeRetry(int retry) {
+
+    /*
+     * Check the retry number wont cause long overflow in delayMillisBeforeRetry.
+     * The largest retry that will produce a positive delayMillisBeforeRetry is 53.
+     * (2^53 - 1) * 1000 = 9.0071993e+18
+     */
+    final int maxRetryNumber = 53;
+    if (retry > maxRetryNumber) {
+      retry = maxRetryNumber;
+    }
+
     // Formula: 2ᶜ - 1
     long delaySecondsBeforeRetry = (long) (Math.pow(2, retry) - 1);
     long delayMillisBeforeRetry = delaySecondsBeforeRetry * MILLIS_PER_SECOND;
