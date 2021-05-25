@@ -1,5 +1,8 @@
 # Ewon Flexy Automatic Code Retry Library Changelog
 
+## v1.5
+### Major Changes
+- Bug Fix: Added protection against retryNumber counter overflowing
 ## v1.4
 ### Major Changes
 - Bug Fix: Fixed long overflows causing negative backoff times
